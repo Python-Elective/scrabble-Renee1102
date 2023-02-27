@@ -71,31 +71,20 @@ def get_word_score(word, n):
     n: integer (HAND_SIZE; i.e., hand size required for additional points)
     returns: int >= 0
     """
-    word: string(ascii.lowercase)
-    n: int 
-    score = 0
-    for n in word:
-        score = len(word) * 2 
-    if len(word) == 7:
-        score = (len(word) * 2) + 50
-    return score 
 
 # get word score function used for finding the total score by the end of the scrabble game
 
 
 def get_word_score(word, n):
-    score = 0
-    score_sum = 0
-    n = int 
-    SCRABBLE_LETTER_VALUES
-    for n in word:
-        if n == HAND_SIZE:
-            score = (SCRABBLE_LETTER_VALUES(word) * len(word)) + 50 
-            score_sum = score 
-        else:
-            score = SCRABBLE_LETTER_VALUES(word) * len(word)
-            score_sum = score 
-    return score_sum
+    assert type(word) == str, "does not match str"
+    assert type(n) == int, "does not match int"
+    assert n > 0, "must be greater than 0"
+    assert len(word) > 0, "must be greater than 0"
+    assert word.islower() == True, "word is in lower case"
 
-    assert n == 10, "error message"
-    return score_sum
+    for letter in word:
+        if n == HAND_SIZE:
+            score = (SCRABBLE_LETTER_VALUES(letter) * len(word)) + 50 
+        else:
+            score = SCRABBLE_LETTER_VALUES(letter) * len(word)
+    return score
