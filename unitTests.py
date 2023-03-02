@@ -1,4 +1,4 @@
-from Renee-1102-Scrabble import*
+from Scrabble import*
 
 #
 # Test code
