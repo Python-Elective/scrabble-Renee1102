@@ -74,17 +74,137 @@ def get_word_score(word, n):
 
 # get word score function used for finding the total score by the end of the scrabble game
 
-
-def get_word_score(word, n):
     assert type(word) == str, "does not match str"
     assert type(n) == int, "does not match int"
-    assert n > 0, "must be greater than 0"
-    assert len(word) > 0, "must be greater than 0"
-    assert word.islower() == True, "word is in lower case"
+    assert n > 0, "must be greater or equal to 0"
+    assert len(word) >= 0, "must be greater than 0"
+    assert word.islower() == True, "word is lower case"
+
+    score = 0
 
     for letter in word:
-        if n == HAND_SIZE:
-            score = (SCRABBLE_LETTER_VALUES(letter) * len(word)) + 50 
+        score = score + SCRABBLE_LETTER_VALUES[letter]
+    if n == len(word):
+        score = (score * len(word)) + 50 
+    else:
+        score = score * len(word)
+    return score 
+
+
+
+
+
+
+# Problem #2: Make sure you understand how this function works and what it does!
+#
+def display_hand(hand):
+    """
+    Displays the letters currently in the hand.
+
+    For example:
+    >>> display_hand({'a':1, 'x':2, 'l':3, 'e':1})
+    Should print out something like:
+       a x x l l l e
+    The order of the letters is unimportant.
+
+    hand: dictionary (string -> int)
+    """
+    for letter in hand.keys():
+        for j in range(hand[letter]):
+            print(letter, end=" ")       # print all on the same line
+    print()                             # print an empty line
+
+#
+# Problem #2: Make sure you understand how this function works and what it does!
+#
+
+
+def deal_hand(n):
+    """
+    Returns a random hand containing n lowercase letters.
+    At least n/3 the letters in the hand should be VOWELS.
+
+    Hands are represented as dictionaries. The keys are
+    letters and the values are the number of times the
+    particular letter is repeated in that hand.
+
+    n: int >= 0
+    returns: dictionary (string -> int)
+    """
+    hand = {}
+    num_vowels = n // 3
+
+    for i in range(num_vowels):
+        x = VOWELS[random.randrange(0, len(VOWELS))]
+        hand[x] = hand.get(x, 0) + 1
+
+    for i in range(num_vowels, n):
+        x = CONSONANTS[random.randrange(0, len(CONSONANTS))]
+        hand[x] = hand.get(x, 0) + 1
+
+    return hand
+
+#
+# Problem #2: Update a hand by removing letters
+#
+
+def update_hand(hand, word):
+    """
+    Assumes that 'hand' has all the letters in word.
+    In other words, this assumes that however many times
+    a letter appears in 'word', 'hand' has at least as
+    many of that letter in it. 
+
+    Updates the hand: uses up the letters in the given word
+    and returns the new hand, without those letters in it.
+
+    Has no side effects: does not modify hand.
+
+    word: string
+    hand: dictionary (string -> int)    
+    returns: dictionary (string -> int)
+    """
+
+def update_hand(hand, word):
+    assert type(word) == str, "type does not match"
+    assert type(hand) == dict, "type does not match"
+
+    updated_hand = deal_hand(hand)
+    for letter in updated_hand:
+        if updated_hand[letter] == 0:
+            del updated_hand[letter]
         else:
-            score = SCRABBLE_LETTER_VALUES(letter) * len(word)
-    return score
+            updated_hand[letter] = updated_hand[letter] - 1
+    assert type(hand) == dict, "type error"
+    return updated_hand
+
+
+def is_valid_word(word, hand, word_list):
+    """
+    Returns True if word is in the word_list and is entirely
+    composed of letters in the hand. Otherwise, returns False.
+
+    Does not mutate hand or word_list.
+
+    word: string
+    hand: dictionary (string -> int)
+    word_list: list of lowercase strings
+    """
+
+    """
+    PsuedoCode: 
+    for each letter in hand
+    if letter in word is the same as letter in the word list
+    returns true 
+    or else returns false when letter does not match letter in word list
+    """
+    
+    assert type(word) == string, "type does not match"
+    assert type(hand) == dict, "type does not match"
+    assert word.islower == True, "word is lowercase"
+
+    for letter in hand:
+        if letter in word == letter in word_list:
+            return True
+        else: 
+            return False 
