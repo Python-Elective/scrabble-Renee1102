@@ -168,13 +168,15 @@ def update_hand(hand, word):
 def update_hand(hand, word):
     assert type(word) == str, "type does not match"
     assert type(hand) == dict, "type does not match"
+    assert len(word) > 0, "length can not be zero"
+    assert len(hand) > 0, "length can not be zero"
 
-    updated_hand = deal_hand(hand)
+    updated_hand = hand.copy()
+
     for letter in updated_hand:
+        updated_hand[letter] -= 1
         if updated_hand[letter] == 0:
-            del updated_hand[letter]
-        else:
-            updated_hand[letter] = updated_hand[letter] - 1
+            del updated_hand[letter] 
     assert type(hand) == dict, "type error"
     return updated_hand
 
@@ -208,3 +210,114 @@ def is_valid_word(word, hand, word_list):
             return True
         else: 
             return False 
+
+
+
+def calculate_hand_len(hand):
+    """ 
+    Returns the length (number of letters) in the current hand.
+
+    hand: dictionary (string-> int)
+    returns: integer
+    """
+    # TO DO... <-- Remove this comment when you code this function
+    assert type(hand) == dict, "type does not match"
+    return sum(hand.values())
+
+def play_hand(hand, word_list, n):
+    """
+    Allows the user to play the given hand, as follows:
+
+    * The hand is displayed.
+    * The user may input a word or a single period (the string ".") 
+      to indicate they're done playing
+    * Invalid words are rejected, and a message is displayed asking
+      the user to choose another word until they enter a valid word or "."
+    * When a valid word is entered, it uses up letters from the hand.
+    * After every valid word: the score for that word is displayed,
+      the remaining letters in the hand are displayed, and the user
+      is asked to input another word.
+    * The sum of the word scores is displayed when the hand finishes.
+    * The hand finishes when there are no more unused letters or the user
+      inputs a "."
+
+      hand: dictionary (string -> int)
+      word_list: list of lowercase strings
+      n: integer (HAND_SIZE; i.e., hand size required for additional points)
+
+    """
+    # BEGIN PSEUDOCODE <-- Remove this comment when you code this function; do your coding within the pseudocode (leaving those comments in-place!)
+    # Keep track of the total score
+    total_score = 0
+    # As long as there are still letters left in the hand:
+    while True:
+    # Display the hand
+      print("Current line: ", end='')
+      display_hand[hand]
+    # Ask user for input
+      word_input = input("Enter word either a word or enter full stop for finish game: ")
+    # If the input is a single period:
+      if word_input == '.':
+    # End the game (break out of the loop)
+        print("Game finished, total score is : " + str(total_score + ' points.'))
+        break
+    # Otherwise (the input is not a single period):
+      else:
+    # If the word is not valid:
+        if word_input != is_valid_word(word_input, hand, word_list):
+    # Reject invalid word (print a message followed by a blank line)
+          print("Wrong input, enter again.")
+          print()
+    # Otherwise (the word is valid):
+        else:
+
+    # Tell the user how many points the word earned, and the updated total score, in one line followed by a blank line
+          score = get_word_score(word_input, n)
+          total_score += score
+          print('"' + word_input + '"' + " earned " + str(score ) + " points. Total: " + str(total_score) + " points.")
+    # Update the hand
+        hand = update_hand(hand, word_input)
+    # Game is over (user entered a '.' or ran out of letters), so tell user the total score
+        if calculate_hand_len(hand) == 0:
+            print("No letters left. Total score : " + str(total_score) + " points.")
+            break
+
+
+def play_game(word_list):
+    """
+    Allow the user to play an arbitrary number of hands.
+
+    1) Asks the user to input 'n' or 'r' or 'e'.
+      * If the user inputs 'n', let the user play a new (random) hand.
+      * If the user inputs 'r', let the user play the last hand again.
+      * If the user inputs 'e', exit the game.
+      * If the user inputs anything else, tell them their input was invalid.
+    
+    2) When done playing the hand, repeat from step 1    
+    """
+    # TO DO ... <-- Remove this comment when you code this function
+    # <-- Remove this line when you code the function
+    while True:
+        input_choice = input("Enter n to play a new game, r to play the last game again, or e to exit game: ")
+        if input_choice == 'n':
+          hand = update_hand(hand, word_list)
+          print(play_hand(hand, word_list))
+        else: 
+          if input_choice == 'r':
+            print(play_hand(hand, word_list))
+          else: 
+            if input_choice == 'e': 
+              print("End game.")
+              break
+            else:
+               print("Input invalid.")
+
+    print("play_game not yet implemented.")
+
+
+#
+# Build data structures used for entire session and play game
+#
+if __name__ == '__main__':
+    word_list = load_words()
+    play_game(word_list)

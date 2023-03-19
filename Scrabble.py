@@ -71,8 +71,22 @@ def get_word_score(word, n):
     n: integer (HAND_SIZE; i.e., hand size required for additional points)
     returns: int >= 0
     """
-    # TO DO ... <-- Remove this comment when you code this function
 
+    assert type(word) == str, "does not match str"
+    assert type(n) == int, "does not match int"
+    assert n > 0, "must be greater or equal to 0"
+    assert len(word) >= 0, "must be greater than 0"
+    assert word.islower() == True, "word is lower case"
+
+    score = 0
+
+    for letter in word:
+        score = score + SCRABBLE_LETTER_VALUES[letter]
+    if n == len(word):
+        score = (score * len(word)) + 50 
+    else:
+        score = score * len(word)
+    return score 
 
 #
 # Problem #2: Make sure you understand how this function works and what it does!
@@ -103,11 +117,9 @@ def deal_hand(n):
     """
     Returns a random hand containing n lowercase letters.
     At least n/3 the letters in the hand should be VOWELS.
-
     Hands are represented as dictionaries. The keys are
     letters and the values are the number of times the
     particular letter is repeated in that hand.
-
     n: int >= 0
     returns: dictionary (string -> int)
     """
@@ -124,8 +136,6 @@ def deal_hand(n):
 
     return hand
 
-#
-# Problem #2: Update a hand by removing letters
 #
 
 
@@ -145,8 +155,21 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
-    # TO DO ... <-- Remove this comment when you code this function
+    #def updat_hand(hand, word):
+def update_hand(hand, word):
+    assert type(word) == str, "type does not match"
+    assert type(hand) == dict, "type does not match"
+    assert len(word) > 0, "length can not be zero"
+    assert len(hand) > 0, "length can not be zero"
 
+    updated_hand = hand.copy
+
+    for letter in updated_hand:
+        updated_hand[letter] -= 1
+        if updated_hand[letter] == 0:
+            del updated_hand[letter] 
+    assert type(hand) == dict, "type error"
+    return updated_hand
 
 #
 # Problem #3: Test word validity
@@ -163,6 +186,15 @@ def is_valid_word(word, hand, word_list):
     word_list: list of lowercase strings
     """
     # TO DO ... <-- Remove this comment when you code this function
+    assert type(word) == string, "type does not match"
+    assert type(hand) == dict, "type does not match"
+    assert word.islower == True, "word is lowercase"
+
+    for letter in hand:
+        if letter in word == letter in word_list:
+            return True
+        else: 
+            return False 
 
 
 #
@@ -177,6 +209,8 @@ def calculate_hand_len(hand):
     returns: integer
     """
     # TO DO... <-- Remove this comment when you code this function
+    assert type(hand) == dict, "type does not match"
+    return sum(hand.values())
 
 
 def play_hand(hand, word_list, n):
@@ -203,30 +237,39 @@ def play_hand(hand, word_list, n):
     """
     # BEGIN PSEUDOCODE <-- Remove this comment when you code this function; do your coding within the pseudocode (leaving those comments in-place!)
     # Keep track of the total score
-
+    total_score = 0
     # As long as there are still letters left in the hand:
-
+    while True:
     # Display the hand
-
+      print("Current line: ", end='')
+      display_hand[hand]
     # Ask user for input
-
+      word_input = input("Enter word either a word or enter full stop for finish game: ")
     # If the input is a single period:
-
+      if word_input == '.':
     # End the game (break out of the loop)
-
+        print("Game finished, total score is : " + str(total_score + ' points.'))
+        break
     # Otherwise (the input is not a single period):
-
+      else:
     # If the word is not valid:
-
+        if word_input != is_valid_word(word_input, hand, word_list):
     # Reject invalid word (print a message followed by a blank line)
-
+          print("Wrong input, enter again.")
+          print()
     # Otherwise (the word is valid):
+        else:
 
     # Tell the user how many points the word earned, and the updated total score, in one line followed by a blank line
-
+          score = get_word_score(word_input, n)
+          total_score += score
+          print('"' + word_input + '"' + " earned " + str(score ) + " points. Total: " + str(total_score) + " points.")
     # Update the hand
-
+        hand = update_hand(hand, word_input)
     # Game is over (user entered a '.' or ran out of letters), so tell user the total score
+        if calculate_hand_len(hand) == 0:
+            print("No letters left. Total score : " + str(total_score) + " points.")
+            break
 
 
 #
@@ -247,6 +290,21 @@ def play_game(word_list):
     """
     # TO DO ... <-- Remove this comment when you code this function
     # <-- Remove this line when you code the function
+    while True:
+        input_choice = input("Enter n to play a new game, r to play the last game again, or e to exit game: ")
+        if input_choice == 'n':
+          hand = update_hand(hand, word_list)
+          print(play_hand(hand, word_list))
+        else: 
+          if input_choice == 'r':
+            print(play_hand(hand, word_list))
+          else: 
+            if input_choice == 'e': 
+              print("End game.")
+              break
+            else:
+               print("Input invalid.")
+
     print("play_game not yet implemented.")
 
 
