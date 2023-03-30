@@ -217,6 +217,7 @@ def is_valid_word(word, hand, word_list):
             if hand_copy[letter] > 0:
                 hand_copy[letter] -= 1
             else: # not enough letters
+                del hand_copy[letter]
                 return False
         else:
             return False
@@ -247,6 +248,7 @@ def calculate_hand_len(hand):
     # TO DO... <-- Remove this comment when you code this function
     assert type(hand) == dict, "type does not match"
     return sum(hand.values())
+
 
 def play_hand(hand, word_list, n):
     """
@@ -292,6 +294,7 @@ def play_hand(hand, word_list, n):
     # Reject invalid word (print a message followed by a blank line)
           print("Wrong input, enter again.")
           print()
+          continue
     # Otherwise (the word is valid):
         else:
 
@@ -319,23 +322,27 @@ def play_game(word_list):
     
     2) When done playing the hand, repeat from step 1    
     """
-    hand = deal_hand(HAND_SIZE) **inside hand.
 
+    hand = {}
     while True:
         input_choice = input("Enter n to play a new game, r to play the last game again, or e to exit game: ")
         if input_choice == 'n':
+            hand = deal_hand(HAND_SIZE)
+            old_hand = hand.copy()
             play_hand(hand, word_list,HAND_SIZE)
         else: 
           if input_choice == 'r':
-            play_hand(old_hand, word_list, HAND_SIZE)
+            if len(hand) == 0:
+                print("Sorry. You have not played a hand before.")
+                continue
+            else:
+                play_hand(old_hand, word_list, HAND_SIZE)
           else: 
             if input_choice == 'e': 
               print("End game.")
               break
             else:
                print("Input invalid.")
-
-    print("play_game not yet implemented.")
 
 
 #
