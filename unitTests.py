@@ -1,4 +1,4 @@
-from Scrabble import *
+from Renee_1102_Scrabble import*
 
 #
 # Test code
@@ -25,7 +25,12 @@ def test_get_word_score():
     if not failure:
         print("SUCCESS: test_get_word_score()")
 
+       
+
+
 # end of test_get_word_score
+
+
 
 
 def test_update_hand():
